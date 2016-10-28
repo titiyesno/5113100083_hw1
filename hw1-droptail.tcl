@@ -15,16 +15,20 @@ set f1 [open dt1.tr w]
 set f2 [open dt2.tr w]
 set f3 [open dt3.tr w]
 set f4 [open dt4.tr w]
+set in [open throughput.awk r]
 
 proc finish {} {
-        global ns nf f0 f1 f2 f3 f4
+        global ns nf tf f0 f1 f2 f3 f4 in
         $ns flush-trace
         close $nf
+        close $tf
         close $f0
         close $f1
         close $f2
         close $f3
         close $f4
+        close $in
+        exec awk -f throughput.awk drop-tail.tr &
         exec nam drop-tail.nam &
         exec xgraph dt0.tr dt1.tr dt2.tr dt3.tr dt4.tr &
         exit 0

@@ -15,16 +15,20 @@ set f1 [open sfq1.tr w]
 set f2 [open sfq2.tr w]
 set f3 [open sfq3.tr w]
 set f4 [open sfq4.tr w]
+set in [open throughput.awk r]
 
 proc finish {} {
-        global ns nf f0 f1 f2 f3 f4
+        global ns nf tf f0 f1 f2 f3 f4 in
         $ns flush-trace
         close $nf
+        close $tf
         close $f0
         close $f1
         close $f2
         close $f3
         close $f4
+        close $in
+        exec awk -f throughput.awk sfq.tr &
         exec nam sfq.nam &
         exec xgraph sfq0.tr sfq1.tr sfq2.tr sfq3.tr sfq4.tr &
         exit 0
